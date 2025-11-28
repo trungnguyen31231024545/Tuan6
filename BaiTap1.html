@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaiTap1</title>
+    <!--EchoEcho-->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1.ten {
+            color: blue;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 3em;
+        }
+        h2.tuoi {
+            text-decoration: underline;
+            margin-top: 0;
+            font-size: 2em;
+        }
+        button {
+            margin-top: 40px;
+            padding: 12px 30px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="ketqua"></div>
+        <button onclick="nhapNgay()">Nhập lại thông tin</button>
+    </div>
+    <script>
+        function nhapNgay() {
+            let ten = prompt("Tên bạn là gì?");
+            if (!ten || ten.trim() === "") {
+                alert("Bạn chưa nhập tên hoặc đã hủy!");
+                return;
+            }
+            let tuoi = prompt("Bạn bao nhiêu tuổi?");
+            if (!tuoi || tuoi.trim() === "") {
+                alert("Bạn chưa nhập tuổi hoặc đã hủy!");
+                return;
+            }
+            document.getElementById("ketqua").innerHTML = `
+            <h1 class="ten">${ten.trim()}</h1>
+            <h2 class="tuoi">${tuoi.trim()}</h2>
+            `;
+        }
+        // Tự động chạy ngay khi trang vừa tải xong
+        document.addEventListener("DOMContentLoaded", function () {
+            nhapNgay();
+        });
+    </script>
+</body>
+</html>

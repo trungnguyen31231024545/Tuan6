@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaiTap4</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        strong {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 25px;
+            color: #444;
+        }
+        input[type="text"] {
+            width: 100px;
+            padding: 14px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            margin: 8px 5px;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+        input[type="text"]:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+        input[type="button"] {
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 10px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        input[value="Start"] {
+            background: #28a745;
+            color: white;
+        }
+        input[value="Start"]:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(40, 167, 69, 0.4);
+        }
+        input[value="Stop"] {
+            background: #dc3545;
+            color: white;
+        }
+        input[value="Stop"]:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(220, 53, 69, 0.4);
+        }
+        .display {
+            margin: 40px 0 20px;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        span {
+            display: inline-block;
+            min-width: 90px;
+            padding: 18px 10px;
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(145deg, #1e1e2f, #2d2d44);
+            color: #0ff;
+            border-radius: 16px;
+            margin: 0 8px;
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.3),
+                inset 0 -5px 15px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(0, 255, 255, 0.3);
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transition: all 0.3s;
+        }
+        span#h { color: #ff6b6b; text-shadow: 0 0 15px rgba(255, 107, 107, 0.8); }
+        span#m { color: #4ecdc4; text-shadow: 0 0 15px rgba(78, 205, 196, 0.8); }
+        span#s { color: #0ff; text-shadow: 0 0 20px rgba(0, 255, 255, 0.9); }
+
+        /* Hiệu ứng nhấp nháy khi gần hết giờ (<10s) */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 1); }
+        }
+        .ending span {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <strong>Nhập thông tin ban đầu:</strong>  
+        <input type="text" id="h_val" placeholder="Giờ" value=""/> <br/><br/>
+        <input type="text" id="m_val" placeholder="Phút" value=""/> <br/><br/>
+        <input type="text" id="s_val" placeholder="Giây" value=""/> <br/><br/>
+        <input type="button" value="Start" onclick="start()"/>
+        <input type="button" value="Stop" onclick="stop()"/> <br/><br/>
+        
+        <div class="display">
+            <span id="h">00</span> :
+            <span id="m">00</span> :
+            <span id="s">00</span>
+        </div>
+    </div>
+
+<script>
+    var h = 0;
+    var m = 0;
+    var s = 0;
+    var timeout = null;
+
+    function start() {
+        if (timeout) clearTimeout(timeout);
+        
+        h = parseInt(document.getElementById("h_val").value) || 0;
+        m = parseInt(document.getElementById("m_val").value) || 0;
+        s = parseInt(document.getElementById("s_val").value) || 0;
+        
+        if (h === 0 && m === 0 && s === 0) {
+            alert("Vui lòng nhập thời gian lớn hơn 0!");
+            return;
+        }
+        updateDisplay();
+        demNguoc();
+    }
+
+    function demNguoc() {
+        if (h === 0 && m === 0 && s === 0) {
+            alert("Hết giờ!");
+            document.querySelector('.display').classList.remove('ending');
+            stop();
+            return;
+        }
+
+        if (s > 0) {
+            s--;
+        } else if (m > 0) {
+            m--;
+            s = 59;
+        } else if (h > 0) {
+            h--;
+            m = 59;
+            s = 59;
+        }
+
+        updateDisplay();
+
+        // Hiệu ứng cảnh báo khi còn dưới 10 giây
+        if (h === 0 && m === 0 && s <= 10) {
+            document.querySelector('.display').classList.add('ending');
+        } else {
+            document.querySelector('.display').classList.remove(' thanh');
+        }
+
+        timeout = setTimeout(demNguoc, 1000);
+    }
+
+    function updateDisplay() {
+        document.getElementById("h").innerHTML = (h < 10 ? "0" : "") + h;
+        document.getElementById("m").innerHTML = (m < 10 ? "0" : "") + m;
+        document.getElementById("s").innerHTML = (s < 10 ? "0" : "") + s;
+    }
+
+    function stop() {
+        clearTimeout(timeout);
+        timeout = null;
+        document.querySelector('.display').classList.remove('ending');
+    }
+</script>
+</body>
+</html>

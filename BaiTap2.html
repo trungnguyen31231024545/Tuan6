@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaiTap2</title>
+    <!--EchoEcho-->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background-color: #d9534f;
+            color: white;
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="hoTen">Họ và tên</label><br>
+        <input type="text" id="hoTen" placeholder="Nhập họ và tên của bạn">
+        <br><br>
+        <button id="btnCanhBao">Cảnh báo</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const nutCanhBao = document.getElementById("btnCanhBao");
+            const inputHoTen  = document.getElementById("hoTen");
+            nutCanhBao.addEventListener("click", function () {
+                let noiDung = inputHoTen.value.trim();
+                // Nội dụng trống
+                if (noiDung === "") {
+                    alert("Vui lòng nhập Họ và tên trước khi nhấn Cảnh báo!");
+                    return;
+                }
+                // Cảnh báo
+                alert("Truy tìm " + noiDung);
+            });
+            // Có thể dùng Enter thay thế
+            inputHoTen.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    nutCanhBao.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

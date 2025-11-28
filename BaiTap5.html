@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaiTap5</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap');
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            color: #fff;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 70px 90px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1.8s ease-out;
+            max-width: 90%;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5.5rem;
+            margin: 0 0 70px 0;
+            background: linear-gradient(45deg, #ff6b6b, #f06292, #ff8a80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8)); }
+            to { filter: drop-shadow(0 0 40px rgba(255, 20, 147, 1)); }
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            font-size: 2.8rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 32px 90px;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            min-width: 220px;
+        }
+
+        #btnCo {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #d63031;
+        }
+
+        #btnCo:hover {
+            transform: scale(1.15) translateY(-8px);
+            box-shadow: 0 25px 50px rgba(255, 107, 107, 0.6);
+        }
+
+        #btnKhong {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #00b894;
+        }
+
+        #btnKhong:hover {
+            transform: scale(1.08) translateY(-5px) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(78, 205, 196, 0.5);
+        }
+
+        /* Hiệu ứng lấp lánh khi hover */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.7s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Trái tim bay lung linh hơn */
+        .heart {
+            position: absolute;
+            font-size: 2.5rem;
+            pointer-events: none;
+            animation: flyUp 8s linear infinite;
+            opacity: 0;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+            z-index: -1;
+        }
+
+        @keyframes flyUp {
+            0%   { 
+                transform: translateY(100vh) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+            10%  { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { 
+                transform: translateY(-120px) rotate(720deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Hiệu ứng bong bóng trái tim nhỏ */
+        .heart:nth-child(odd) { animation-delay: 0s; }
+        .heart:nth-child(even) { animation-delay: 2s; }
+
+        /* Khi nhấn CÓ - hiệu ứng nổ tim */
+        .explode {
+            animation: explodeHeart 1s ease-out forwards;
+        }
+
+        @keyframes explodeHeart {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BẠN CÓ THÍCH MÌNH KHÔNG?</h1>
+        <div class="buttons" id="buttons">
+            <div class="btn" id="btnCo">CÓ</div>
+            <div class="divider"></div>
+            <div class="btn" id="btnKhong">KHÔNG</div>
+        </div>
+    </div>
+    <script>
+        let count = 0;
+        // Tạo trái tim bay khắp nơi
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💜";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }, 400);
+        // Hàm khi nhấn nút CÓ
+        function khiNhanCo() {
+            alert("Xin lỗi, bạn không phải là đối tượng của mình.");
+        }
+        // Hàm khi nhấn nút KHÔNG
+        function khiNhanKhong() {
+            count++;
+            alert("Có thể bạn nên chọn lại nhé.");
+            // Mỗi 3 lần bấm KHÔNG → đổi chỗ 2 nút (xoay vòng 2 trạng thái)
+            if (count % 3 === 0) {
+                const buttons = document.getElementById("buttons");
+                const btnCo = document.getElementById("btnCo");
+                const btnKhong = document.getElementById("btnKhong");
+                const divider = document.querySelector(".divider");
+                // Kiểm tra trạng thái hiện tại bằng cách xem nút nào đứng trước
+                const firstChild = buttons.children[0];
+                if (firstChild.id === "btnCo") {
+                    // Case hiện tại: CÓ - KHÔNG
+                    // Đổi thành: KHÔNG - CÓ
+                    buttons.innerHTML = "";
+                    buttons.appendChild(btnKhong);
+                    buttons.appendChild(divider);
+                    buttons.appendChild(btnCo);
+                } else {
+                    // Case hiện tại: KHÔNG -CÓ
+                    // Đổi lại: CÓ - KHÔNG
+                    buttons.innerHTML = "";
+                    buttons.appendChild(btnCo);
+                    buttons.appendChild(divider);
+                    buttons.appendChild(btnKhong);
+                }
+            }
+        }
+        // Gắn sự kiện ban đầu khi trang tải xong
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("btnCo").addEventListener("click", khiNhanCo);
+            document.getElementById("btnKhong").addEventListener("click", khiNhanKhong)
+        });
+    </script>
+</body>
+</html>
